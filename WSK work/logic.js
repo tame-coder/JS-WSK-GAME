@@ -52,6 +52,15 @@ class Actor_Character extends Actor{
         this.health += recovery;
         if(this.health > 100) {this.health = 100} 
     }
+    islevel(lvl){
+        this.experience += lvl;
+        if(this.experience > this.expToNextLevel)
+        {
+            this.experience -= this.expToNextLevel;
+            this.level += 1;
+            this.expToNextLevel = this.expToNextLevel + this.expToNextLevel/10;
+        }
+    }
 }
 
 //создаю обьекты тут
@@ -59,6 +68,7 @@ class Actor_Character extends Actor{
 let player = new Actor_Character(180, 120, 40, "#4caf50", 1, 100, 0, "Игрок456", 10);
 let enemy = new Actor(100, 100, 40, "#f44336"); // враг 
 let hpoint = new Actor(20, 100, 40, "#3665f4ff"); // друг 
+let levelpoint = new Actor(20, 200, 40, "#f4cb36ff"); // друг 
 
 
 //саунд дизайн
@@ -68,6 +78,7 @@ const deadSound = new Audio('content/sounds/dead.mp3');
 function playerIinteracts(){
     if (player.intersects(enemy)) {player.isdamage(10)}
     if (player.intersects(hpoint)) {player.isHealth(10)}
+    if (player.intersects(levelpoint)) {player.islevel(10)}
 }
 //типо  tick задает все грубо говаря шаг
 function drawAll() {
@@ -77,6 +88,7 @@ function drawAll() {
     enemy.draw();
     player.draw();
     hpoint.draw();
+    levelpoint.draw();
     showIsDead();
     showDavMode();
 
@@ -152,8 +164,8 @@ function showDavMode(){
     if(isDaveMode != false){
         document.getElementById("dav-mode-show").innerHTML = `
         <h1>Dav Mode Panel</h1>
-        <h3>player X:${player.x} Y:${player.y}</h3>
-        <h3>player Hp:${player.health} Lvl:${player.level}</h3>
+        <h3>player X:${player.x} Y:${player.y} Hp:${player.health}</h3>
+        <h3>player Exp:${player.experience} Lvl:${player.level} extnl:${player.expToNextLevel}</h3>
         <button onclick="DaveModebtn()" id="DaveModebtnbttn">scrit</button>
         `
     }
