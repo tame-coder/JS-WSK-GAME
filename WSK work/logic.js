@@ -37,8 +37,8 @@ class Actor_Character extends Actor{
         this.level = level;
         this.name = name;
         this.cash = cash;
-        this.experience = 0;
-        this.expToNextLevel = 100; // опыт для повышения уровня
+        this.fuel = 100;
+        this.fuelback = 100; // опыт для повышения уровня
     }
 
     isdamage(damage) {
@@ -52,33 +52,56 @@ class Actor_Character extends Actor{
         this.health += recovery;
         if(this.health > 100) {this.health = 100} 
     }
-    islevel(lvl){
-        this.experience += lvl;
-        if(this.experience > this.expToNextLevel)
-        {
-            this.experience -= this.expToNextLevel;
-            this.level += 1;
-            this.expToNextLevel = this.expToNextLevel + this.expToNextLevel/10;
-        }
+    isFuel(){
+
+        this.fuel = 100;
+
+        obfuel.x = getRandomIntInclusive(1, 76)*10;
+        obfuel.y = 0;
     }
 }
 
 //создаю обьекты тут
 
-let player = new Actor_Character(180, 120, 40, "#4caf50", 1, 100, 0, "Игрок456", 10);
-let enemy = new Actor(100, 100, 40, "#f44336"); // враг 
-let hpoint = new Actor(20, 100, 40, "#3665f4ff"); // друг 
-let levelpoint = new Actor(20, 200, 40, "#f4cb36ff"); // друг 
+let player = new Actor_Character((getRandomIntInclusive(1, 76)*10), 170, 40, "#4caf50", 4, 100, 0, "Игрок456", 10);
+let obfuel = new Actor((getRandomIntInclusive(1, 76)*10), 0, 40, "#f4cb36ff"); // друг 
 
+let enemy = new Actor((getRandomIntInclusive(1, 76)*10), 0, 40, "#f44336"); // враг 
+let enemya = new Actor((getRandomIntInclusive(1, 76)*10), 0, 40, "#f44336");
+
+//постоянно срабатывает 1000 = секунда
+setInterval(() => {
+    drawAll();
+}, 100);
+
+setInterval(() => {
+    showUserGui();
+    showDavMode();
+    oblMoves();
+}, 500);
+
+setInterval(() => {
+    player.fuel -= 5
+}, 1000);
 
 //саунд дизайн
 const deadSound = new Audio('content/sounds/dead.mp3');
 
+function testObjectMove(obj, val)
+{
+    if(obj.y < 359){obj.y += val;}
+    else{obj.x = (getRandomIntInclusive(1, 76)*10); obj.y = 0}
+}
 
+function oblMoves(){
+    testObjectMove(enemy, getRandomIntInclusive(10, 60));
+    testObjectMove(enemya, getRandomIntInclusive(20, 50));
+    testObjectMove(obfuel, 10);
+}
 function playerIinteracts(){
     if (player.intersects(enemy)) {player.isdamage(10)}
-    if (player.intersects(hpoint)) {player.isHealth(10)}
-    if (player.intersects(levelpoint)) {player.islevel(10)}
+    if (player.intersects(enemya)) {player.isdamage(10)}
+    if (player.intersects(obfuel)) {player.isFuel()}
 }
 //типо  tick задает все грубо говаря шаг
 function drawAll() {
@@ -86,23 +109,32 @@ function drawAll() {
     playerIinteracts()
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     enemy.draw();
+    enemya.draw();
     player.draw();
-    hpoint.draw();
-    levelpoint.draw();
+    obfuel.draw();
     showIsDead();
-    showDavMode();
-
+    checkPlayerFuel();
 }
+
+function checkPlayerFuel() {
+    if (player.fuel <= 0) {
+        player.isDead = true;
+    }
+}
+
+
 //жив или нет проверяет и отпровляет сообщение если здох
 function showIsDead() 
 {
     const statusText = document.getElementById("showIsDeadText");
+        if(player.fuel < 1){player.isDead = true}
         if (!player.isDead) {
             statusText.innerText = "Жив";
         } else {
             statusText.innerText = "Мертв";
             deadSound.play().catch(() => {});
             alert("Ты умер, чувак!");
+            window.location.href = 'index.html';
             
 }       
 
@@ -113,12 +145,17 @@ function move(action){
 
         switch (action) {
             case "up":
+                /*
                 if (player.y > 0) player.y -= 10 * player.speed;
                 else player.isDead = true;
+                */
+                oblMoves();
                 break;
             case "down":
+                /*
                 if (player.y + player.size < canvas.height) player.y += 10 * player.speed;
                 else player.isDead = true;
+                */
                 break;
             case "left":
                 if (player.x > 0) player.x -= 10 * player.speed;
@@ -129,7 +166,7 @@ function move(action){
                 else player.isDead = true;
                 break;
         }
-    drawAll();
+
 }
 //упровление с клавиш стрелочек
 document.addEventListener("keydown", function(event) {
@@ -159,13 +196,23 @@ function DaveModebtn(){
         showDavMode();
     }
 }
+//
+function showUserGui()
+{
+    document.getElementById("user-gui").innerHTML = `
+    <h4>Здоровье: ${player.health} Топливо:${player.fuel}</h4>
+    <h4>игрок: ${player.name}</h4>
+    <h4></h4>
+    `
+}
+
 //показывает Davmode вещи и читы для разработки
 function showDavMode(){
     if(isDaveMode != false){
         document.getElementById("dav-mode-show").innerHTML = `
         <h1>Dav Mode Panel</h1>
         <h3>player X:${player.x} Y:${player.y} Hp:${player.health}</h3>
-        <h3>player Exp:${player.experience} Lvl:${player.level} extnl:${player.expToNextLevel}</h3>
+        <h3>player Fuel:${player.fuel} Lvl:${player.level} fb:${player.fuelback}</h3>
         <button onclick="DaveModebtn()" id="DaveModebtnbttn">scrit</button>
         `
     }
@@ -176,6 +223,20 @@ function showDavMode(){
         `
     }
 }
+
+function myButtonRegCheck(){
+    window.location.href = 'Main.html'; 
+}
+
+function myButton() {
+    document.getElementById("reg-main").innerHTML = `
+        <label for="">введите имя</label>
+        <input type="text" name="" id="userName">
+        <button onclick="myButtonRegCheck()">Начать</button>
+    `   
+        }
+
+
 //рандом принимает MAX и MIN 
 function getRandomIntInclusive(min, max) {
   min = Math.ceil(min); // Минимум
