@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Движущийся куб</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h2>Управление кубом</h2>
+    <canvas id="gameCanvas" width="600" height="300"></canvas>
+
+    <div class="controls">
+        <button onclick="move('left')">Влево</button>
+        <button onclick="move('right')">Вправо</button>
+    </div>
+
+    <div class="controls">
+        <button onclick="move('up')">Вверх</button>
+        <button onclick="move('down')">Вниз</button>
+    </div>  
+
+    <div>
+        <h1 id="showIsDeadText"></h1>
+    </div>
+    
+    <div id="dav-mode-show">
+        <h1>Dav Mode Panel</h1>
+        <button onclick="DaveModebtn()" id="DaveModebtnbttn">DavMode</button>
+    </div>
+
+
+    <script src="logic.js"></script>
+
+</body>
+</html>

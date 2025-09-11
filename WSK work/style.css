@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Jura:wght@300..700&family=Kelly+Slab&family=Share+Tech+Mono&display=swap');
+
+body {
+    background-color: #121212;
+    color: white;
+    font-family: "Kelly Slab", "Jura", sans-serif;
+    font-weight: 700;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+}
+
+canvas {
+    background-color: #1e1e1e;
+    display: block;
+    margin: 0 auto;
+    border: 2px solid #ffffff20;
+}
+
+.controls {
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin: 0 10px;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #555;
+}
+
+#dav-mode-show{
+    background-color: #121212;
+    font-family: "Share Tech Mono", sans-serif;
+}
