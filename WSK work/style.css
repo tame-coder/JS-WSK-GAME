@@ -40,3 +40,49 @@ button:hover {
     background-color: #121212;
     font-family: "Share Tech Mono", sans-serif;
 }
+
+form{
+    background-color: rgb(80, 80, 80);
+    display: block;
+    margin: 15px 0px 15px 0px;
+    border-radius: 0.5cap;
+    padding: 15px;
+}
+
+.user-input{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    margin: 15px 0px 15px 0px;
+}
+
+input{
+    font-family: "Share Tech Mono", sans-serif;
+    background-color: #333;
+    color: white;
+    text-align: center;
+    border: 2px solid black;
+    border-radius: 0.4cap;
+    padding: 5px;
+    margin: 5px 0px 5px 0px;
+    height: 20px;
+    width: 250px;
+    transition: all 0.4s ease-in-out;
+}
+
+input:hover{
+    border-color: greenyellow;
+
+}
+
+input:focus{
+    border-color: yellow;
+    outline: none;
+    box-shadow: #0000006d 0px 0px 10px 5px;
+}
+
+#gameCanvas {
+    background: #00D4FF;
+
+  }
