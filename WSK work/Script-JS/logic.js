@@ -9,7 +9,7 @@ const ctx = canvas.getContext("2d");
 
 let player = new Actor_Character((getRandomIntInclusive(1, 76)*10), 170, 40, "#4caf50", 4, 100, 0, "Игрок456", 10);
 
-let obfuel = new Actor_Enemy_fuel((getRandomIntInclusive(1, 76)*10), 0, 50, "#f4cb36ff"); // друг 
+let obfuel = new Actor_Enemy_fuel((getRandomIntInclusive(1, 76)*10), 0, 70, "#f4cb36ff"); // друг 
 
 // массивы
 let enemies = [];
@@ -25,20 +25,20 @@ setInterval(() => {
 
 setInterval(() => {
     showUserGui();
-    showDavMode();
     oblMoves();
-}, 200);
+}, 50);
 
 setInterval(() => {
+    showDavMode();
 
-    if (stars.length < 4) { 
+    if (stars.length < 2) { 
         let newstar = new Actor_Enemy_star(
             getRandomIntInclusive(1, 76) * 10,
             0,
             getRandomIntInclusive(35, 45),
             "#f44336"
         );
-        stars.push(newstar);
+        stars.push(newstar)
     }
 
     if (healths.length < 2) { 
@@ -83,6 +83,17 @@ setInterval(() => {
     player.fuel -= 5
 }, 1000);
 
+let timem = 0;
+let times = 1;
+
+setInterval(() => {
+
+    if(times < 60){times += 1;}
+    if(times > 60){times = 0, timem += 1;}
+    
+}, 1000);
+
+
 //саунд дизайн
 const deadSound = new Audio('content/sounds/dead.mp3');
 
@@ -96,23 +107,23 @@ function oblMoves(){
     
 
     for(let star of stars) {
-        testObjectMove(star, getRandomIntInclusive(25, 45))
+        testObjectMove(star, getRandomIntInclusive(25, 45)/2)
     }
 
     for(let enemy of enemies) {
-        testObjectMove(enemy, getRandomIntInclusive(10, 30))
+        testObjectMove(enemy, getRandomIntInclusive(10, 30)/2)
     }
 
     for(let health of healths) {
-        testObjectMove(health, getRandomIntInclusive(30, 40))
+        testObjectMove(health, getRandomIntInclusive(30, 40)/2)
     }
 
     for (let cloud of clouds) {
-        testObjectMove(cloud, getRandomIntInclusive(15 , 25))
+        testObjectMove(cloud, getRandomIntInclusive(15 , 25)/2)
     }
 
     for (let cloud of lastclouds) {
-        testObjectMove(cloud, getRandomIntInclusive(1 , 5))
+        testObjectMove(cloud, getRandomIntInclusive(1 , 5)/2)
     }
 
     testObjectMove(obfuel, getRandomIntInclusive(5, 15));
@@ -174,13 +185,14 @@ function drawAll() {
     obfuel.draw();
     showIsDead();
 
-    ctx.fillStyle = "#fff"; // Цвет текста (можно поменять)
+    ctx.fillStyle = "#000000ff"; // Цвет текста (можно поменять)
     ctx.font = "20px Kelly Slab"; // Размер и шрифт текста
 
     // Позиция текста на экране (x, y)
     ctx.fillText(`Здоровье: ${player.health}`, 10, 25); 
     ctx.fillText(`Топливо: ${player.fuel}`, 10, 50);
     ctx.fillText(`Звезды: ${player.stars}`, 10, 75);
+    ctx.fillText(`Время: ${timem}:${times}`, 10, 100);
 
 }
 
@@ -289,15 +301,6 @@ function myButtonRegCheck(){
     window.location.href = 'Main.html'; 
 }
 
-function myButton() {
-    document.getElementById("reg-main").innerHTML = `
-        <label for="">введите имя</label>
-        <input type="text" name="" id="userName">
-        <button onclick="myButtonRegCheck()">Начать</button>
-    `   
-        }
-
-
 //рандом принимает MAX и MIN 
 function getRandomIntInclusive(min, max) {
   min = Math.ceil(min); // Минимум
@@ -308,4 +311,3 @@ function getRandomIntInclusive(min, max) {
 // Первоначальный отрисовка
 drawAll();
 
-//зделай механику хп и опыта, взаимодействия с обьектами
